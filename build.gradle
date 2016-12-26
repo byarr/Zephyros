@@ -18,7 +18,8 @@ repositories {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.8.3'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.3'
+    compile 'org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version'
+    compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.8.4'
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.8.4'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.4'
 }
