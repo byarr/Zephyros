@@ -1,3 +1,5 @@
+package cfn1
+
 import java.util.*
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -57,7 +59,10 @@ class Resource(val id: String) {
     }
 
     fun toMap(): Map<String, Any> {
-        return hashMapOf(Pair("Type", "SomeType"))
+        if (type == null) {
+            throw IllegalStateException("Type musnt be null id: " + id)
+        }
+        return linkedMapOf(Pair("Type", type!!), Pair("Properties", properties))
     }
 
 }
