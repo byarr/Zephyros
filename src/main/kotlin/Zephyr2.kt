@@ -1,11 +1,12 @@
 package cfn2
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import java.util.*
 
 @JsonPropertyOrder("AWSTemplateFormatVersion", "Description", "Resources")
 class CloudFormation() {
@@ -29,7 +30,10 @@ class CloudFormation() {
     fun Description(desc: String) {
         description = desc
     }
+
 }
+
+data class Lambda_Function_Code(val S3Bucket: String? = null, val S3Key: String? = null, val S3ObjectVersion: String? = null, val ZipFile: String? = null)
 
 @JsonPropertyOrder("Type", "Properties")
 class Lambda_Function(): Resource("AWS::Lambda::Function") {
@@ -37,6 +41,7 @@ class Lambda_Function(): Resource("AWS::Lambda::Function") {
     class Props {
         var Description: String? = null
         var FunctionName: String? = null
+        val Code: Lambda_Function_Code = Lambda_Function_Code(S3Bucket = "Bucket", S3Key = "MyKey")
     }
 
     val Properties = Props()
@@ -45,7 +50,15 @@ class Lambda_Function(): Resource("AWS::Lambda::Function") {
     fun FunctionName(s: String) { Properties.FunctionName = s }
 }
 
-abstract class Resource(val Type: String)
+abstract class Resource(val t: String) {
+
+    @JsonProperty("Type")
+    val Type: String
+
+    init {
+        this.Type = t
+    }
+}
 
 fun CloudFormation(init: CloudFormation.() -> Unit): CloudFormation {
     val html = CloudFormation()
@@ -65,6 +78,7 @@ fun main(args: Array<String>) {
 
     val mapper = ObjectMapper(YAMLFactory())
     mapper.registerModule(KotlinModule())
+    mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL)
 //    mapper.propertyNamingStrategy = PropertyNamingStrategy.UpperCamelCaseStrategy()
     val s = mapper.writeValueAsString(cfn)
     print(s)
