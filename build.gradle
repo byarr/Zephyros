@@ -1,6 +1,6 @@
 buildscript {
 
-    ext.kotlin_version = '1.0.5-3'
+    ext.kotlin_version = '1.1.0'
 
     repositories {
         mavenLocal()
@@ -19,8 +19,10 @@ repositories {
 
 dependencies {
     compile 'org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version'
-    compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.8.4'
-    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.8.4'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.4'
+    compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.8.7'
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.8.7'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.7'
     compile 'org.jsoup:jsoup:1.10.2'
+    compile group: 'org.json', name: 'json', version: '20160810'
+    testCompile 'junit:junit:4.12'
 }
