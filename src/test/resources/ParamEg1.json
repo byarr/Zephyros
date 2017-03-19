@@ -10,5 +10,13 @@
       "Description": "HashType PrimaryKey Type",
       "Type": "String"
     }
+  },
+  "Resources" : {
+    "myDynamoDBTable" : {
+      "Type" : "AWS::DynamoDB::Table"
+    },
+    "myOtherDynamoDBTable" : {
+      "Type" : "AWS::DynamoDB::Table"
+    }
   }
 }

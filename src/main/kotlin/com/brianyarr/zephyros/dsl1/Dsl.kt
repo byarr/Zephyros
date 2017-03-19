@@ -22,6 +22,9 @@ class Template {
     @get:JsonProperty("Resources")
     val Resources = linkedMapOf<String, Resource>()
 
+    @get:JsonIgnore
+    val Dynamo = DynamoWrapper()
+
     fun desc(d: String) {
         this.Description = d
     }
@@ -33,18 +36,14 @@ class Template {
         return p
     }
 
-    fun dynamo(): Dynamo {
-        return Dynamo()
-    }
-
-    fun DynamodbTable(name: String, init: DynamodbTable.() -> Unit): DynamodbTable {
+    fun DynamoDB_Table(name: String, init: DynamodbTable.() -> Unit): DynamodbTable {
         val d = DynamodbTable()
         d.init()
         this.Resources.put(name, d)
         return d
     }
 
-    inner class Dynamo {
+    inner class DynamoWrapper {
         fun Table(name: String, init: DynamodbTable.() -> Unit): DynamodbTable {
             val d = DynamodbTable()
             d.init()
@@ -56,7 +55,8 @@ class Template {
 
 
 @JsonNaming(PropertyNamingStrategy.UpperCamelCaseStrategy::class)
-open class Resource(type: String) {
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+open class Resource(@JsonProperty("Type") val type: String) {
     val properties = linkedMapOf<String, Object>()
 }
 
