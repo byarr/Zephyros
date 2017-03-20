@@ -13,10 +13,16 @@
   },
   "Resources" : {
     "myDynamoDBTable" : {
-      "Type" : "AWS::DynamoDB::Table"
+      "Type" : "AWS::DynamoDB::Table",
+      "Properties": {
+
+      }
     },
     "myOtherDynamoDBTable" : {
-      "Type" : "AWS::DynamoDB::Table"
+      "Type" : "AWS::DynamoDB::Table",
+      "Properties": {
+
+      }
     }
   }
 }

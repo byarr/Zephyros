@@ -23,7 +23,7 @@ class Template {
     val Resources = linkedMapOf<String, Resource>()
 
     @get:JsonIgnore
-    val Dynamo = DynamoWrapper()
+    val DynamoDB = DynamoWrapper()
 
     fun desc(d: String) {
         this.Description = d
@@ -56,12 +56,53 @@ class Template {
 
 @JsonNaming(PropertyNamingStrategy.UpperCamelCaseStrategy::class)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonPropertyOrder("Type", "Properties")
 open class Resource(@JsonProperty("Type") val type: String) {
-    val properties = linkedMapOf<String, Object>()
+//    val properties = linkedMapOf<String, Any>()
 }
 
-class DynamodbTable: Resource("AWS::DynamoDB::Table");
+class DynamodbTable: Resource("AWS::DynamoDB::Table") {
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonNaming(PropertyNamingStrategy.UpperCamelCaseStrategy::class)
+//    @JsonPropertyOrder(alphabetic = false)
+    class DynamoDBProperties {
+        val attributeDefinitions: MutableList<AttributeDefinition> = mutableListOf()
+        val keySchema: MutableList<KeyDefinition> = mutableListOf()
+        var provisionedThroughput: ProvisionedThroughput? = null
+        var tableName: String? = null
+
+    }
+
+    var properties = DynamoDBProperties()
+
+    fun attribute(name: String, type: String) {
+        properties.attributeDefinitions.add(AttributeDefinition(name, type))
+    }
+
+    fun key(name: String, type: String) {
+        properties.keySchema.add(KeyDefinition(name, type))
+    }
+
+    fun tableName(name: String) {
+        properties.tableName = name
+    }
+
+    fun throughput(readCapacityUnits: String, writeCapcityUnits: String) {
+        properties.provisionedThroughput = ProvisionedThroughput(readCapacityUnits, writeCapcityUnits)
+    }
+
+
+}
+
+@JsonNaming(PropertyNamingStrategy.UpperCamelCaseStrategy::class)
+class AttributeDefinition(var AttributeName: String, var AttributeType: String)
+
+@JsonNaming(PropertyNamingStrategy.UpperCamelCaseStrategy::class)
+class KeyDefinition(var AttributeName: String, var KeyType: String)
+
+@JsonNaming(PropertyNamingStrategy.UpperCamelCaseStrategy::class)
+class ProvisionedThroughput(var ReadCapacityUnits: String, var WriteCapacityUnits: String)
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder("Description", "Type", "Parameters")

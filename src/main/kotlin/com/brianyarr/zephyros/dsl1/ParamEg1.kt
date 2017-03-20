@@ -15,11 +15,11 @@ fun paramTemplate(): Template {
             Type = "String"
         }
 
-        Dynamo.Table("myOtherDynamoDBTable") {
+        DynamoDB.Table("myDynamoDBTable") {
 
         }
 
-        DynamoDB_Table("myDynamoDBTable") {
+        DynamoDB_Table("myOtherDynamoDBTable") {
 
         }
 
